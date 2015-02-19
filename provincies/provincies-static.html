@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)http://leafletjs.com/examples/geojson-example.html -->
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Leaflet GeoJSON Example</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css">
+		<style type="text/css">
+
+			.info {
+				padding: 6px 8px;
+				font: 14px/16px Arial, Helvetica, sans-serif;
+				background: white;
+				background: rgba(255,255,255,0.8);
+				box-shadow: 0 0 15px rgba(0,0,0,0.2);
+				border-radius: 5px;
+			}
+			.info h4 {
+				margin: 0 0 5px;
+				color: #777;
+			}
+			.leaflet-container {
+				background: none;
+			}
+			.leaflet-control-attribution {
+				display: none
+			}
+		</style>
+	</head>
+	<body>
+		<div id="map" style="width: 600px; height: 500px;"></div>
+		<script src="./resources/jquery-min.js"></script>
+		<script src="./resources/leaflet.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+(function() {
+	var map;
+
+	var prov = {
+		"Groningen": {
+			"style": {
+				"fillColor": "#EDEDB1"
+			}
+		},
+		"Friesland": {
+			"style": {
+				"fillColor": "#FFDC7E"
+			}
+		},
+		"Drenthe": {
+			"style": {
+				"fillColor": "#DDC3A0"
+			}
+		},
+		"Overijssel": {
+			"style": {
+				"fillColor": "#B5DBC2"
+			}
+		},
+		"Flevoland": {
+			"style": {
+				"fillColor": "#C6D5EA"
+			}
+		},
+		"Noord-Holland": {
+			"style": {
+				"fillColor": "#E5D192"
+			}
+		},
+		"Gelderland": {
+			"style": {
+				"fillColor": "#FDDEA8"
+			}
+		},
+		"Utrecht": {
+			"style": {
+				"fillColor": "#F1C0BB"
+			}
+		},
+		"Zuid-Holland": {
+			"style": {
+				"fillColor": "#F3E987"
+			}
+		},
+		"Limburg": {
+			"style": {
+				"fillColor": "#D9AECA"
+			}
+		},
+		"Noord-Brabant": {
+			"style": {
+				"fillColor": "#D3DF8B"
+			}
+		},
+		"Zeeland": {
+			"style": {
+				"fillColor": "#F3B184"
+			}
+		},
+	}
+
+	$(function() {
+		map = L.map('map', {
+			zoomControl: false,
+			dragging: false,
+			touchZoom: false,
+			scrollWheelZoom: false,
+			doubleClickZoom: false,
+			boxZoom: false,
+			tap: false,
+			keyboard: false
+		}).setView([52.100556, 5.645833], 7);
+
+		// $.getJSON( "./resources/provincies.geojson")
+		$.getJSON( "./resources/map.geojson")
+		.done(function(data) {
+			var pNr = 0;
+			var geojson = L.geoJson(data, {
+				onEachFeature: function (feature, layer) {
+					// layer.bindPopup(feature.properties.provincienaam);
+					layer.on({
+						mouseover: function (e) {
+							var layer = e.target;
+
+							layer.setStyle({
+								// weight: 5,
+								// color: '#666',
+								// dashArray: '',
+								fillOpacity: 0.7
+							});
+
+							if (!L.Browser.ie && !L.Browser.opera) {
+								layer.bringToFront();
+							}
+
+							info.update(layer.feature.properties);
+						},
+						mouseout: function(e) {
+							geojson.resetStyle(e.target);
+							info.update();
+						},
+						click: function(e) {
+							// map.fitBounds(e.target.getBounds());
+						}
+					});
+				},
+				style: function (feature) {
+
+					console.log(pNr++);
+					return {
+						weight: 2,
+						color: '#aaa',
+						// dashArray: '3',
+						opacity: 1,
+						// fillColor: prov[feature.properties.provincienaam].style.fillColor,
+						fillOpacity: 0.2
+					};
+				}
+
+			});
+			geojson.addTo(map);
+
+			var info = L.control();
+
+			info.onAdd = function (map) {
+				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+				this.update();
+				return this._div;
+			};
+
+			// method that we will use to update the control based on feature properties passed
+			info.update = function (props) {
+				this._div.innerHTML = '<h4>Provincies</h4>' +  (props ?
+					'<b>' + props.provincienaam + '<br/></b>'
+					: 'Beweeg de muis over een provincie');
+			};
+
+			info.addTo(map);
+
+		})
+		.fail(function() {
+			console.log( "error" );
+		});
+
+	});
+
+})();
+
+//]]>
+</script>
+
+
+
+
+	</body>
+</html>
