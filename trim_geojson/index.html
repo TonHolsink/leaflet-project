@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Trim GeoJSON</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+	<div style="" class="output"></div>
+
+	<!-- jquery -->
+	<script src="./jquery-min.js"></script>
+
+	<!-- start javascripting -->
+	<script type="text/javascript">
+
+		// trim the geojson coordinates
+		function trimCoords(arr) {
+		    for (var i = 0; i < arr.length; i++)
+		        if (Array.isArray(arr[i]))
+		            trimCoords(arr[i])
+		        else
+		            arr[i] = Math.round(arr[i]*100000)/100000;
+		    return arr;
+		}
+		$(window).load(function() {
+            // load the data file and use the trimCoords function
+		    $.get("map.geojson", function(response) {
+			    var f = response;
+			    for (i in f.features) {
+			        f.features[i].geometry.coordinates = trimCoords(f.features[i].geometry.coordinates);
+			    }
+			    $(".output").html(JSON.stringify(response, null, ""));
+		    }, 'json');
+		});
+	</script>
+</body>
+</html>
