@@ -6,7 +6,7 @@
 		<title>Leaflet GeoJSON Example</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css">
+		<link rel="stylesheet" href="./resources/vendor/leaflet/leaflet.css">
 		<style type="text/css">
 
 			.info {
@@ -21,12 +21,18 @@
 				margin: 0 0 5px;
 				color: #777;
 			}
+			.leaflet-container {
+				background: none;
+			}
+			.leaflet-control-attribution {
+				display: none
+			}
 		</style>
 	</head>
 	<body>
-		<div id="map" style="width: 600px; height: 500px;"></div>
-		<script src="./resources/jquery-min.js"></script>
-		<script src="./resources/leaflet.js"></script>
+		<div id="map" style="width: 530px; height: 700px;"></div>
+		<script src="./resources/scripts/jquery-min.js"></script>
+		<script src="./resources/vendor/leaflet/leaflet.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 
@@ -97,49 +103,18 @@
 	}
 
 	$(function() {
-		map = L.map('map').setView([52.100556, 5.645833], 7);
-		//OpenStreetMap.Mapbox
-		L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-			id: 'examples.map-20v6611k'
-		}).addTo(map);
+		map = L.map('map', {
+			zoomControl: false,
+			dragging: false,
+			touchZoom: false,
+			scrollWheelZoom: false,
+			doubleClickZoom: false,
+			boxZoom: false,
+			tap: false,
+			keyboard: false
+		}).setView([52.100556, 5.645833], 7.3);
 
-		//OpenStreetMap.BlackAndWhite
-		// L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-		// 	maxZoom: 18,
-		// 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		// }).addTo(map);
-
-		//OpenStreetMap_DE
-		// L.tileLayer('http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
-		// 	maxZoom: 18,
-		// 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		// }).addTo(map);
-
-		//OpenStreetMap.HOT
-		// L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-		// 	maxZoom: 18,
-		// 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
-		// }).addTo(map);
-
-		//Thunderforest.OpenCycleMap
-		// L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
-		// 	maxZoom: 18,
-		// 	attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		// }).addTo(map);
-
-		//Thunderforest.Transport
-		// var Thunderforest_Transport = L.tileLayer('http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png', {
-		// 	maxZoom: 18,
-		// 	attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		// }).addTo(map);
-
-		L.control.scale({"imperial": false}).addTo(map);
-
-		$.getJSON( "./resources/provincies.geojson")
+		$.getJSON( "./resources/data/map.geojson")
 		.done(function(data) {
 			var pNr = 0;
 			var geojson = L.geoJson(data, {
@@ -167,7 +142,7 @@
 							info.update();
 						},
 						click: function(e) {
-							map.fitBounds(e.target.getBounds());
+							// map.fitBounds(e.target.getBounds());
 						}
 					});
 				},
@@ -179,7 +154,7 @@
 						color: '#aaa',
 						// dashArray: '3',
 						opacity: 1,
-						fillColor: prov[feature.properties.provincienaam].style.fillColor,
+						// fillColor: prov[feature.properties.provincienaam].style.fillColor,
 						fillOpacity: 0.2
 					};
 				}
