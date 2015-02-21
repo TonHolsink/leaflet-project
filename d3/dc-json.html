@@ -21,7 +21,7 @@
 var chart = dc.seriesChart("#test");
 var ndx, runDimension, runGroup;
 
-d3.json("morley.json", function(error, experiments) {
+d3.json("./data/morley.json", function(error, experiments) {
 
 	ndx = crossfilter(experiments);
 	runDimension = ndx.dimension(function(d) {return [+d.Expt, +d.Run]; });
@@ -76,9 +76,9 @@ function load_button(file) {
 	};
 }
 
-var button1 = load_button("morley.json"),
-	button2 = load_button("morley2.json"),
-	button3 = load_button("morley3.json");
+var button1 = load_button("./data/morley.json"),
+	button2 = load_button("./data/morley2.json"),
+	button3 = load_button("./data/morley3.json");
 
 </script>
 

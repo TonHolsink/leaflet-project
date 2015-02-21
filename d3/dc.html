@@ -21,7 +21,7 @@
 var chart = dc.seriesChart("#test");
 var ndx, runDimension, runGroup;
 
-d3.csv("morley.csv", function(error, experiments) {
+d3.csv("./data/morley.csv", function(error, experiments) {
 
 	ndx = crossfilter(experiments);
 	runDimension = ndx.dimension(function(d) {return [+d.Expt, +d.Run]; });
@@ -76,9 +76,9 @@ function load_button(file) {
 	};
 }
 
-var button1 = load_button("morley.csv"),
-	button2 = load_button("morley2.csv"),
-	button3 = load_button("morley3.csv");
+var button1 = load_button("./data/morley.csv"),
+	button2 = load_button("./data/morley2.csv"),
+	button3 = load_button("./data/morley3.csv");
 
 </script>
 
