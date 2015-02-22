@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8'>
+
+	<title>Crossfilter Test</title>
+
+	<script src='./resources/crossfilter.min.js' type='text/javascript'></script>
+	<script src='./resources/jquery-min.js' type='text/javascript'></script>
+</head>
+
+<body>
+
+
+<script type="text/javascript">
+
+//utility function
+function print_filter(filter){
+	var f=eval(filter);
+	if (typeof(f.length) != "undefined") {}else{}
+	if (typeof(f.top) != "undefined") {f=f.top(Infinity);}else{}
+	if (typeof(f.dimension) != "undefined") {f=f.dimension(function(d) { return "";}).top(Infinity);}else{}
+	console.log(filter+"("+f.length+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
+}
+
+var livingThings = crossfilter([
+	// Fact data.
+	{ name: "Rusty",	type: "human", legs: 2 },
+	{ name: "Alex",	 type: "human", legs: 2 },
+	{ name: "Lassie", type: "dog",	 legs: 4 },
+	{ name: "Spot",	 type: "dog",	 legs: 4 },
+	{ name: "Polly",	type: "bird",	legs: 2 },
+	{ name: "Fiona",	type: "plant", legs: 0 }
+]);
+
+var typeDimension = livingThings.dimension(function(d) {return d.type});
+typeDimension.filter("dog");
+var countMeasure = typeDimension.group().reduceCount();
+print_filter(countMeasure);
+// var a = countMeasure.top(4);
+// console.log(a);
+// var legMeasure = typeDimension.group().reduceSum(function(d) {return d.legs;});
+// print_filter(legMeasure);
+
+var typeFilterDimension = livingThings.dimension(function(d) {return d.type});
+typeFilterDimension.filter("dog");
+var countMeasure = typeDimension.group().reduceCount();
+print_filter(countMeasure);
+var a = countMeasure.top(4);
+console.log(a);
+</script>
+
+</body>
+</html>
